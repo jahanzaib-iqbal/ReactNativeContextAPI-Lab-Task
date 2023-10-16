@@ -12,6 +12,7 @@ export default function LoginScreen() {
   const [passsword, onChangePassword] = useState('');
   const [email, onChangeEmail] = useState('');
   const [email1, onChangeEmail1] = useState('');
+  const [email2, onChangeEmail2] = useState('');
 
   const navigation = useNavigation();
   const {  signup} = PostAPIHooks();
