@@ -1,26 +1,48 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-
 import { useNavigation } from '@react-navigation/native';
-import PostAPIHooks from './APIHooks/PostAPIHooks';
-import Profile from './profile';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function LoginScreen() {
-  
   const [username, onChangeUsername] = useState('');
-  const [passsword, onChangePassword] = useState('');
-  const [email, onChangeEmail] = useState('');
-  const [email1, onChangeEmail1] = useState('');
-  const [email2, onChangeEmail2] = useState('');
-
+  const [password, onChangePassword] = useState('');
+  
+  const [userId, setId] = useState('');
   const navigation = useNavigation();
-  const {  signup} = PostAPIHooks();
 
   const loginBtnPressed = async () => {
-  await signup(email, passsword, username);
-  navigation.push('Profile');
-  }
+    let users = await AsyncStorage.getItem('users');
+    users = JSON.parse(users) || [];
+    
+    const user = users.find((userObj) => userObj.username === username);
+    
+    if (user) {
+      
+      
+      navigation.push('Profile',{ userId: user.id });
+    } else {
+      // Generate a unique ID (you can use a library like uuid for this)
+      const uniqueId = generateUniqueId();
+      
+      // Add the new user with a unique ID
+      users.push({
+        id: uniqueId,
+        username: username,
+        password: password,
+      });
+      await AsyncStorage.setItem('users', JSON.stringify(users));
+      users = await AsyncStorage.getItem('users');
+      console.log(JSON.parse(users));
+      navigation.push('Profile',);
+    }
+  };
+
+  const generateUniqueId = () => {
+    // You can implement your own logic to generate a unique ID here
+    // For simplicity, you can use a timestamp as a unique ID
+    return new Date().getTime().toString();
+  };
 
   return (
     <View style={styles.container}>
@@ -36,20 +58,12 @@ export default function LoginScreen() {
       <TextInput
         style={styles.input}
         onChangeText={onChangePassword}
-        value={passsword}
+        value={password}
         placeholder="Password"
-        // keyboardType="numeric"
-      />
-<TextInput
-        style={styles.input}
-        onChangeText={onChangeEmail}
-        value={email}
-        placeholder="Email"
-        // keyboardType="numeric"
       />
 
       <TouchableOpacity style={styles.button} onPress={loginBtnPressed}>
-        <Text style={{color:'white'}}>Sign up</Text>
+        <Text style={{ color: 'white' }}>Sign up</Text>
       </TouchableOpacity>
 
       <StatusBar style="auto" />
