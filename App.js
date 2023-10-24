@@ -1,13 +1,8 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
-
 import Home from "./Home";
-import DashboardScreen from './Dashboard';
-import LoginScreen from "./LoginScreen";
-import MyChatScreen from './MyChat';
-
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Profile from './profile';
+
 
 export default function App() {
 
@@ -18,44 +13,12 @@ export default function App() {
     <Stack.Navigator >
 
     <Stack.Screen 
-      name="LoginScreen" 
-      component={LoginScreen}
-      options={{
-        headerShown:false
-      }}
-    />
-    <Stack.Screen 
-      name="Profile" 
-      component={Profile}
-      options={{
-        headerShown:false
-      }}
-    />
-    
-    <Stack.Screen 
       name="Home" 
       component={Home}
       options={{
         headerShown:true
       }}
     />
-
-    <Stack.Screen 
-      name="Ali" 
-      component={MyChatScreen}
-      options={{
-        headerShown:false
-      }}
-    />
-
-  <Stack.Screen 
-      name="DDD" 
-      component={DashboardScreen}
-      options={{
-        headerShown:false
-      }}
-    />
-
     </Stack.Navigator>
   </NavigationContainer>
   );
